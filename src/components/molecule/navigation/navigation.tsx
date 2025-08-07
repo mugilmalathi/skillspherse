@@ -45,3 +45,6 @@ const Navigation = React.forwardRef<HTMLNavElement, NavigationProps>(
 Navigation.displayName = "Navigation"
 
 export { Navigation, type NavigationItem }
+
+
+export { Navigation }
