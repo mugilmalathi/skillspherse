@@ -46,5 +46,3 @@ Navigation.displayName = "Navigation"
 
 export { Navigation, type NavigationItem }
 
-
-export { Navigation }
