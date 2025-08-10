@@ -1,0 +1,16 @@
+/* Card specific styles */
+.card-hover {
+  @apply transition-all duration-200 hover:shadow-lg hover:scale-[1.02];
+}
+
+.card-interactive {
+  @apply cursor-pointer transition-all duration-200 hover:shadow-md hover:bg-accent/5;
+}
+
+.card-bordered {
+  @apply border-2;
+}
+
+.card-elevated {
+  @apply shadow-lg;
+}

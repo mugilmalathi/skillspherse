@@ -1,0 +1,16 @@
+/* Input specific styles */
+.input-group {
+  @apply space-y-2;
+}
+
+.input-label {
+  @apply text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70;
+}
+
+.input-error {
+  @apply text-sm text-destructive;
+}
+
+.input-helper {
+  @apply text-sm text-muted-foreground;
+}

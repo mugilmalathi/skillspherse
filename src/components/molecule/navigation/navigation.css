@@ -1,0 +1,20 @@
+/* Navigation specific styles */
+.nav-vertical {
+  @apply flex-col space-x-0 space-y-1;
+}
+
+.nav-pills {
+  @apply space-x-2;
+}
+
+.nav-tabs {
+  @apply border-b space-x-0;
+}
+
+.nav-tab-item {
+  @apply border-b-2 border-transparent hover:border-border;
+}
+
+.nav-tab-active {
+  @apply border-primary text-primary;
+}
