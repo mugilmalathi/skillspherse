@@ -1,4 +1,4 @@
-import Button from "../../";
+import Button from "../../components/atom/button/button";
 import { COURSES } from "../../data";
 import { CreditCard } from "lucide-react";
 
