@@ -40,7 +40,7 @@ export default function Checkout({
                 </div>
                 <Button
                     onClick={onSuccess}
-                    className="mt-6 rounded-xl px-4 py-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500"
+                    className="mt-6 rounded-xl px-4 py-2 bg-white text-black border-2 border-transparent bg-clip-padding relative before:absolute before:inset-0 before:bg-gradient-to-r before:from-indigo-500 before:to-fuchsia-500 before:rounded-xl before:-z-10 before:m-[-2px]"
                 >
                     Pay ${c.price.toFixed(2)}
                 </Button>

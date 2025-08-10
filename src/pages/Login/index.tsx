@@ -16,6 +16,7 @@ export default function Login({ onLogin }:{ onLogin: ()=>void }){
             <input type="password" className="mt-1 w-full rounded-xl bg-slate-950 border border-white/10 px-3 py-2" placeholder="••••••••" />
           </div>
           <Button onClick={onLogin} className="rounded-xl px-4 py-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500">Sign in</Button>
+          <Button onClick={onLogin} className="rounded-xl px-4 py-2 bg-white text-black border-2 border-transparent bg-clip-padding relative before:absolute before:inset-0 before:bg-gradient-to-r before:from-indigo-500 before:to-fuchsia-500 before:rounded-xl before:-z-10 before:m-[-2px]">Sign in</Button>
         </div>
       </div>
     </div>

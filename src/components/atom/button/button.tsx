@@ -15,11 +15,11 @@ export default function Button({
 
   const variants: Record<NonNullable<Props["variant"]>, string> = {
     primary:
-        "border border-black bg-white text-black hover:bg-gray-100 hover:border-gray-800 focus:ring-black",
+        "bg-white text-black border-2 border-transparent bg-clip-padding relative before:absolute before:inset-0 before:bg-gradient-to-r before:from-indigo-500 before:to-fuchsia-500 before:rounded-xl before:-z-10 before:m-[-2px] hover:bg-gray-50 focus:ring-indigo-500",
     secondary:
-        "border border-white/20 bg-slate-900 text-white hover:bg-slate-800 focus:ring-white/40",
+        "bg-white text-black border-2 border-transparent bg-clip-padding relative before:absolute before:inset-0 before:bg-gradient-to-r before:from-indigo-500 before:to-fuchsia-500 before:rounded-xl before:-z-10 before:m-[-2px] hover:bg-gray-50 focus:ring-indigo-500",
     outline:
-        "border border-black bg-transparent text-black hover:bg-gray-100 focus:ring-black",
+        "bg-white text-black border-2 border-transparent bg-clip-padding relative before:absolute before:inset-0 before:bg-gradient-to-r before:from-indigo-500 before:to-fuchsia-500 before:rounded-xl before:-z-10 before:m-[-2px] hover:bg-gray-50 focus:ring-indigo-500",
   };
 
   return (

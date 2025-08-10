@@ -120,7 +120,7 @@ export default function Registration() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="mt-2 w-full rounded-xl px-4 py-3 text-slate-50 bg-gradient-to-r from-indigo-500 to-fuchsia-500 hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-fuchsia-400/50 disabled:opacity-60"
+                        className="mt-2 w-full rounded-xl px-4 py-3 text-black bg-white border-2 border-transparent bg-clip-padding relative before:absolute before:inset-0 before:bg-gradient-to-r before:from-indigo-500 before:to-fuchsia-500 before:rounded-xl before:-z-10 before:m-[-2px] hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 disabled:opacity-60"
                     >
                         {loading ? "Creating..." : "Create account"}
                     </button>
