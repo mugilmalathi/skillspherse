@@ -1,4 +1,4 @@
-import Button from "../../components/atom/button/Button";
+import Button from "../../components/atom/button/button";
 import { COURSES } from "../../data";
 import { CheckCircle2, GraduationCap, BookOpenText, PlayCircle } from "lucide-react";
 
