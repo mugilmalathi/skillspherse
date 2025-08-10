@@ -1,4 +1,4 @@
-import Button from "../../components/atom/button/Button";
+import Button from "../../components/atom/button/button";
 
 
 export default function Login({ onLogin }:{ onLogin: ()=>void }){
