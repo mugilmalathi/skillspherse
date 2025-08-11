@@ -1,10 +1,10 @@
-import Button from "../../components/atom/button/Button";
+import Button from "../../components/atom/button/button";
 import { COURSES } from "../../data";
 import { CheckCircle2, GraduationCap, BookOpenText, PlayCircle } from "lucide-react";
 
 export default function Home({ onViewCourse }: { onViewCourse: (id: number) => void }) {
     return (
-        <div className="bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 overflow-x-clip">
+        <div className="bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 overflow-x-hidden">
             {/* HERO */}
             <div className="mx-auto  px-4 py-20 md:py-28 relative overflow-hidden">
                 <h1 className="text-3xl md:text-6xl font-bold tracking-tight">
@@ -17,11 +17,11 @@ export default function Home({ onViewCourse }: { onViewCourse: (id: number) => v
                 </p>
 
                 <div className="mt-8 flex flex-wrap gap-3">
-                    <Button className="rounded-xl px-4 py-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500">
+                    <Button className="rounded-xl px-4 py-2 bg-white text-black border-2 border-transparent bg-clip-padding relative before:absolute before:inset-0 before:bg-gradient-to-r before:from-indigo-500 before:to-fuchsia-500 before:rounded-xl before:-z-10 before:m-[-2px]">
                         Explore Courses
                     </Button>
 
-                    <Button className="rounded-xl px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white">
+                    <Button className="rounded-xl px-4 py-2 bg-white text-black border-2 border-transparent bg-clip-padding relative before:absolute before:inset-0 before:bg-gradient-to-r before:from-indigo-500 before:to-fuchsia-500 before:rounded-xl before:-z-10 before:m-[-2px]">
             <span className="inline-flex items-center gap-2">
               <PlayCircle className="h-4 w-4" /> Start Free Trial
             </span>
@@ -31,7 +31,7 @@ export default function Home({ onViewCourse }: { onViewCourse: (id: number) => v
                 {/* Decorative blob – anchored so it never creates horizontal scroll */}
                 <div
                     className="
-            pointer-events-none absolute top-0 right-[-12rem]
+            pointer-events-none absolute top-0 right-[-8rem]
             h-[28rem] w-[28rem]
             -translate-y-1/4
             blur-3xl opacity-30
@@ -84,7 +84,7 @@ export default function Home({ onViewCourse }: { onViewCourse: (id: number) => v
                             <div className="mt-4 flex items-center justify-between">
                                 <Button
                                     onClick={() => onViewCourse(c.id)}
-                                    className="rounded-xl px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white"
+                                    className="rounded-xl px-3 py-2 bg-white text-black border-2 border-transparent bg-clip-padding relative before:absolute before:inset-0 before:bg-gradient-to-r before:from-indigo-500 before:to-fuchsia-500 before:rounded-xl before:-z-10 before:m-[-2px]"
                                 >
                                     View Details →
                                 </Button>

@@ -1,4 +1,4 @@
-import Button from "../../components/atom/button/Button";
+import Button from "../../components/atom/button/button";
 import { COURSES } from "../../data";
 
 export default function Courses({ onView }: { onView: (id:number)=>void }){
@@ -14,7 +14,7 @@ export default function Courses({ onView }: { onView: (id:number)=>void }){
             </div>
             <h3 className="mt-2 font-semibold">{c.title}</h3>
             <div className="mt-4 flex items-center justify-between">
-              <Button onClick={()=>onView(c.id)} className="rounded-xl px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white">View Details →</Button>
+              <Button onClick={()=>onView(c.id)} className="rounded-xl px-3 py-2 bg-white text-black border-2 border-transparent bg-clip-padding relative before:absolute before:inset-0 before:bg-gradient-to-r before:from-indigo-500 before:to-fuchsia-500 before:rounded-xl before:-z-10 before:m-[-2px]">View Details →</Button>
               <div className="text-slate-200 font-semibold">${'{'}c.price.toFixed(2){'}'}</div>
             </div>
           </div>
