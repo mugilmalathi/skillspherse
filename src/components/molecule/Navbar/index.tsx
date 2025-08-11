@@ -68,7 +68,7 @@ export default function Navbar({ page, setPage, isAuthed, onLogout, userName }: 
                         <div className="flex items-center gap-3">
                             <span className="text-white">Welcome, {userName}</span>
                             <button
-                                className="rounded-xl px-3 py-2 bg-white/10 hover:bg-white/15 transition-colors"
+                                className="rounded-xl px-3 py-2 border border-white bg-transparent text-white hover:bg-white hover:text-black transition-colors"
                                 onClick={onLogout}
                             >
                                 <span className="inline-flex items-center gap-2">
@@ -112,7 +112,7 @@ export default function Navbar({ page, setPage, isAuthed, onLogout, userName }: 
                                 {!isAuthed ? (
                                     <>
                                         <button
-                                            className="rounded-xl px-3 py-2 border border-white bg-transparent text-white hover:bg-white hover:text-black transition-colors"
+                                            className="rounded-xl px-3 py-2 border border-white bg-transparent text-white hover:bg-white hover:text-black transition-colors w-full text-left"
                                             onClick={() => {
                                                 setPage("login");
                                                 setOpen(false);
@@ -121,7 +121,7 @@ export default function Navbar({ page, setPage, isAuthed, onLogout, userName }: 
                                             Login
                                         </button>
                                         <button
-                                            className="rounded-xl px-3 py-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white hover:from-indigo-600 hover:to-fuchsia-600 transition-colors"
+                                            className="rounded-xl px-3 py-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white hover:from-indigo-600 hover:to-fuchsia-600 transition-colors w-full text-left"
                                             onClick={() => {
                                                 setPage("registration");
                                                 setOpen(false);
@@ -134,8 +134,11 @@ export default function Navbar({ page, setPage, isAuthed, onLogout, userName }: 
                                     <div className="space-y-2">
                                         <div className="text-white px-3 py-2">Welcome, {userName}</div>
                                         <button
-                                            className="rounded-xl px-3 py-2 bg-white/10 hover:bg-white/15 transition-colors w-full"
-                                            onClick={onLogout}
+                                            className="rounded-xl px-3 py-2 border border-white bg-transparent text-white hover:bg-white hover:text-black transition-colors w-full text-left"
+                                            onClick={() => {
+                                                onLogout();
+                                                setOpen(false);
+                                            }}
                                         >
                                             <span className="inline-flex items-center gap-2">
                                                 <LogOut className="h-4 w-4" />
