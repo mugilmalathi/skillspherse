@@ -54,14 +54,17 @@ class ApiClient {
 
     try {
       const response = await fetch(url, config);
-      const data = await response.json();
       
       if (!response.ok) {
-        throw new Error(data.message || `HTTP error! status: ${response.status}`);
+        const errorData = await response.json();
+        console.error('API Error:', errorData);
+        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
       }
       
+      const data = await response.json();
       return data;
     } catch (error) {
+      console.error('Network Error:', error);
       throw new Error(error instanceof Error ? error.message : 'Network error occurred');
     }
   }

@@ -18,19 +18,56 @@ export default function Registration({ onNavigateToLogin }: { onNavigateToLogin?
         setError(null);
         setOk(null);
 
-        if (!name.trim() || !email.trim() || !password || !role) {
-            setError("Please fill in all fields.");
+        // Client-side validation
+        if (!name.trim()) {
+            setError("Please enter your full name.");
+            return;
+        }
+        
+        if (!email.trim()) {
+            setError("Please enter your email address.");
+            return;
+        }
+        
+        if (!password) {
+            setError("Please enter a password.");
+            return;
+        }
+        
+        if (password.length < 6) {
+            setError("Password must be at least 6 characters long.");
+            return;
+        }
+        
+        if (!role) {
+            setError("Please select a role.");
+            return;
+        }
+        
+        // Basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email.trim())) {
+            setError("Please enter a valid email address.");
             return;
         }
 
         try {
             setLoading(true);
+            console.log('Attempting registration with:', { 
+                name: name.trim(), 
+                email: email.trim(), 
+                password: '***',
+                role: role.toLowerCase()
+            });
+            
             const response = await apiClient.register({
                 name: name.trim(),
                 email: email.trim(),
                 password,
-                role: "student", // Map role as needed
+                role: role.toLowerCase(),
             });
+
+            console.log('Registration response:', response);
 
             if (response.success) {
                 setOk("Account created! You can now sign in.");
@@ -42,6 +79,7 @@ export default function Registration({ onNavigateToLogin }: { onNavigateToLogin?
                 setError(response.message || "Registration failed");
             }
         } catch (err: any) {
+            console.error('Registration error:', err);
             setError(err?.message || "Registration failed.");
         } finally {
             setLoading(false);
@@ -93,6 +131,7 @@ export default function Registration({ onNavigateToLogin }: { onNavigateToLogin?
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="••••••••"
                             autoComplete="new-password"
+                            minLength={6}
                             className="mt-2 w-full rounded-xl bg-slate-950/80 border border-white/10 px-4 py-3 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-fuchsia-400/40"
                         />
                         <p className="mt-1 text-xs text-slate-500">Use at least 6 characters.</p>

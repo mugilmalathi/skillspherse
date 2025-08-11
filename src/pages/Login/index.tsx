@@ -13,17 +13,39 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
     e.preventDefault();
     setError(null);
 
-    if (!email.trim() || !password) {
-      setError("Please fill in all fields.");
+    // Client-side validation
+    if (!email.trim()) {
+      setError("Please enter your email address.");
+      return;
+    }
+    
+    if (!password) {
+      setError("Please enter your password.");
+      return;
+    }
+    
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long.");
+      return;
+    }
+    
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      setError("Please enter a valid email address.");
       return;
     }
 
     try {
       setLoading(true);
+      console.log('Attempting login with:', { email: email.trim(), password: '***' });
+      
       const response = await apiClient.login({
         email: email.trim(),
         password,
       });
+
+      console.log('Login response:', response);
 
       if (response.success && response.data) {
         AuthManager.saveAuth(response.data);
@@ -32,6 +54,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
         setError(response.message || "Login failed");
       }
     } catch (err: any) {
+      console.error('Login error:', err);
       setError(err?.message || "Login failed. Please try again.");
     } finally {
       setLoading(false);
@@ -68,6 +91,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
               onChange={(e) => setPassword(e.target.value)}
               className="mt-1 w-full rounded-xl bg-slate-950 border border-white/10 px-3 py-2 text-white placeholder:text-slate-500"
               placeholder="••••••••"
+              minLength={6}
               required
             />
           </div>
