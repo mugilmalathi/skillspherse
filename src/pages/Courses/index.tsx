@@ -3,7 +3,7 @@ import { COURSES } from "../../data";
 
 export default function Courses({ onView }: { onView: (id:number)=>void }){
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12"> 
+    <div className="mx-auto  px-4 py-12"> 
       <h1 className="text-3xl font-bold">Courses</h1>
       <div className="mt-6 grid gap-6 md:grid-cols-3"> 
         {COURSES.map(c => (

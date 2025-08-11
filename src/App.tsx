@@ -29,7 +29,7 @@ export default function App(){
       {page === "registration" && <Registration />}
       {page === "progress" && <div className="p-10 text-slate-300">Progress dashboard (POC placeholder).</div>}
       <footer className="mt-20 border-t border-white/10 bg-slate-900">
-        <div className="mx-auto max-w-7xl px-4 py-10 grid gap-6 md:grid-cols-3 text-slate-400">
+        <div className="mx-auto px-4 py-10 grid gap-6 md:grid-cols-3 text-slate-400">
           <div>
             <div className="font-semibold text-slate-200">VR ImmersiveTrain</div>
             <p className="mt-2">
@@ -55,7 +55,7 @@ export default function App(){
             </ul>
           </div>
         </div>
-        <div className="mx-auto max-w-7xl px-4 py-4 border-t border-white/10 text-sm text-slate-500">
+        <div className="mx-auto  px-4 py-4 border-t border-white/10 text-sm text-slate-500">
           © 2025 ImmersiveTrain. All rights reserved.
         </div>
       </footer>

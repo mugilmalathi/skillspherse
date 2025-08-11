@@ -6,7 +6,7 @@ export default function Home({ onViewCourse }: { onViewCourse: (id: number) => v
     return (
         <div className="bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 overflow-x-clip">
             {/* HERO */}
-            <div className="mx-auto max-w-7xl px-4 py-20 md:py-28 relative overflow-hidden">
+            <div className="mx-auto  px-4 py-20 md:py-28 relative overflow-hidden">
                 <h1 className="text-3xl md:text-6xl font-bold tracking-tight">
                     Master Soft Skills with VR Training
                 </h1>
@@ -42,7 +42,7 @@ export default function Home({ onViewCourse }: { onViewCourse: (id: number) => v
             </div>
 
             {/* FEATURES */}
-            <div className="mx-auto max-w-7xl px-4 py-12 grid min-w-0 gap-6 md:grid-cols-3">
+            <div className="mx-auto  px-4 py-12 grid min-w-0 gap-6 md:grid-cols-3">
                 {[
                     { icon: <GraduationCap className="h-5 w-5" />, title: "Realistic VR Sims", text: "Practice in lifelike scenarios with adaptive AI." },
                     { icon: <BookOpenText className="h-5 w-5" />, title: "Structured Curricula", text: "Beginner-friendly paths with measurable outcomes." },
@@ -61,10 +61,10 @@ export default function Home({ onViewCourse }: { onViewCourse: (id: number) => v
             </div>
 
             {/* POPULAR COURSES */}
-            <div className="mx-auto max-w-7xl px-4 py-12">
+            <div className="mx-auto  px-4 py-12">
                 <div className="flex items-end justify-between gap-4">
                     <h2 className="text-xl md:text-3xl font-bold">Popular Courses</h2>
-                    <Button className="rounded-xl px-3 py-2 border border-white/15">
+                    <Button className="rounded-xl px-3 py-2 text-white border-white/15">
                         View All Courses
                     </Button>
                 </div>
