@@ -1,11 +1,13 @@
 import React from "react";
 import { LogOut, Menu } from "lucide-react";
+import { AuthManager } from "../../../utils/auth";
 
 type Props = {
     page: string;
     setPage: (p: string) => void;
     isAuthed: boolean;
     onLogout: () => void;
+    userName?: string;
 };
 
 const navItem = (
@@ -24,7 +26,7 @@ const navItem = (
     </div>
 );
 
-export default function Navbar({ page, setPage, isAuthed, onLogout }: Props) {
+export default function Navbar({ page, setPage, isAuthed, onLogout, userName }: Props) {
     const [open, setOpen] = React.useState(false);
 
     return (
@@ -50,28 +52,31 @@ export default function Navbar({ page, setPage, isAuthed, onLogout }: Props) {
                     {!isAuthed ? (
                         <div className="flex items-center gap-2">
                             <button
-                                className="rounded-xl px-3 py-2 border border-white bg-white text-white hover:bg-gray-100"
+                                className="rounded-xl px-3 py-2 border border-white bg-transparent text-white hover:bg-white hover:text-black transition-colors"
                                 onClick={() => setPage("login")}
                             >
                                 Login
                             </button>
                             <button
-                                className="rounded-xl px-3 py-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500"
+                                className="rounded-xl px-3 py-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white hover:from-indigo-600 hover:to-fuchsia-600 transition-colors"
                                 onClick={() => setPage("registration")}
                             >
                                 Sign Up
                             </button>
                         </div>
                     ) : (
-                        <button
-                            className="rounded-xl px-3 py-2 bg-white/10 hover:bg-white/15"
-                            onClick={onLogout}
-                        >
-              <span className="inline-flex items-center gap-2">
-                <LogOut className="h-4 w-4" />
-                Logout
-              </span>
-                        </button>
+                        <div className="flex items-center gap-3">
+                            <span className="text-white">Welcome, {userName}</span>
+                            <button
+                                className="rounded-xl px-3 py-2 bg-white/10 hover:bg-white/15 transition-colors"
+                                onClick={onLogout}
+                            >
+                                <span className="inline-flex items-center gap-2">
+                                    <LogOut className="h-4 w-4" />
+                                    Logout
+                                </span>
+                            </button>
+                        </div>
                     )}
                 </div>
 
@@ -107,7 +112,7 @@ export default function Navbar({ page, setPage, isAuthed, onLogout }: Props) {
                                 {!isAuthed ? (
                                     <>
                                         <button
-                                            className="rounded-xl px-3 py-2 border border-white bg-white text-white hover:bg-gray-100"
+                                            className="rounded-xl px-3 py-2 border border-white bg-transparent text-white hover:bg-white hover:text-black transition-colors"
                                             onClick={() => {
                                                 setPage("login");
                                                 setOpen(false);
@@ -116,7 +121,7 @@ export default function Navbar({ page, setPage, isAuthed, onLogout }: Props) {
                                             Login
                                         </button>
                                         <button
-                                            className="rounded-xl px-3 py-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500"
+                                            className="rounded-xl px-3 py-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white hover:from-indigo-600 hover:to-fuchsia-600 transition-colors"
                                             onClick={() => {
                                                 setPage("registration");
                                                 setOpen(false);
@@ -126,15 +131,18 @@ export default function Navbar({ page, setPage, isAuthed, onLogout }: Props) {
                                         </button>
                                     </>
                                 ) : (
-                                    <button
-                                        className="rounded-xl px-3 py-2 bg-white/10 hover:bg-white/15"
-                                        onClick={onLogout}
-                                    >
-                    <span className="inline-flex items-center gap-2">
-                      <LogOut className="h-4 w-4" />
-                      Logout
-                    </span>
-                                    </button>
+                                    <div className="space-y-2">
+                                        <div className="text-white px-3 py-2">Welcome, {userName}</div>
+                                        <button
+                                            className="rounded-xl px-3 py-2 bg-white/10 hover:bg-white/15 transition-colors w-full"
+                                            onClick={onLogout}
+                                        >
+                                            <span className="inline-flex items-center gap-2">
+                                                <LogOut className="h-4 w-4" />
+                                                Logout
+                                            </span>
+                                        </button>
+                                    </div>
                                 )}
                             </div>
                         </div>

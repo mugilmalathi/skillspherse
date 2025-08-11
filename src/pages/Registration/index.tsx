@@ -1,9 +1,10 @@
 import React from "react";
+import { apiClient } from "../../utils/api";
 
 type Role = "Student" | "IT Professional" | "Professor" | "Freelancer";
 const ROLES: Role[] = ["Student", "IT Professional", "Professor", "Freelancer"];
 
-export default function Registration() {
+export default function Registration({ onNavigateToLogin }: { onNavigateToLogin?: () => void }) {
     const [name, setName] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
@@ -24,21 +25,22 @@ export default function Registration() {
 
         try {
             setLoading(true);
-            const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3007";
-            const res = await fetch(`${BASE_URL}/api/auth/register`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    name: name.trim(),
-                    email: email.trim(),
-                    password,
-                    // map your dropdown label to backend value if needed:
-                    role: "student", // or map: role.toLowerCase().replace(" ", "_")
-                }),
+            const response = await apiClient.register({
+                name: name.trim(),
+                email: email.trim(),
+                password,
+                role: "student", // Map role as needed
             });
-            if (!res.ok) throw new Error(await res.text());
-            setOk("Account created! You can now sign in.");
-            setName(""); setEmail(""); setPassword(""); setRole("");
+
+            if (response.success) {
+                setOk("Account created! You can now sign in.");
+                setName("");
+                setEmail("");
+                setPassword("");
+                setRole("");
+            } else {
+                setError(response.message || "Registration failed");
+            }
         } catch (err: any) {
             setError(err?.message || "Registration failed.");
         } finally {
@@ -120,13 +122,20 @@ export default function Registration() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="mt-2 w-full rounded-xl px-4 py-3 text-black bg-white border-2 border-transparent bg-clip-padding relative before:absolute before:inset-0 before:bg-gradient-to-r before:from-indigo-500 before:to-fuchsia-500 before:rounded-xl before:-z-10 before:m-[-2px] hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 disabled:opacity-60"
+                        className="mt-2 w-full rounded-xl px-4 py-3 bg-white text-black hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 disabled:opacity-60 transition-colors"
                     >
                         {loading ? "Creating..." : "Create account"}
                     </button>
 
                     <p className="text-sm text-slate-400 pt-1">
-                        Already have an account? <span className="text-slate-200">Sign in</span>
+                        Already have an account?{" "}
+                        <button
+                            type="button"
+                            onClick={onNavigateToLogin}
+                            className="text-slate-200 hover:text-white underline"
+                        >
+                            Sign in
+                        </button>
                     </p>
                 </form>
             </div>

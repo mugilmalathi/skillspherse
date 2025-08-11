@@ -17,11 +17,11 @@ export default function Home({ onViewCourse }: { onViewCourse: (id: number) => v
                 </p>
 
                 <div className="mt-8 flex flex-wrap gap-3">
-                    <Button className="rounded-xl px-4 py-2 bg-white text-black border-2 border-transparent bg-clip-padding relative before:absolute before:inset-0 before:bg-gradient-to-r before:from-indigo-500 before:to-fuchsia-500 before:rounded-xl before:-z-10 before:m-[-2px]">
+                    <Button variant="primary">
                         Explore Courses
                     </Button>
 
-                    <Button className="rounded-xl px-4 py-2 bg-white text-black border-2 border-transparent bg-clip-padding relative before:absolute before:inset-0 before:bg-gradient-to-r before:from-indigo-500 before:to-fuchsia-500 before:rounded-xl before:-z-10 before:m-[-2px]">
+                    <Button variant="outline">
             <span className="inline-flex items-center gap-2">
               <PlayCircle className="h-4 w-4" /> Start Free Trial
             </span>
@@ -64,7 +64,7 @@ export default function Home({ onViewCourse }: { onViewCourse: (id: number) => v
             <div className="mx-auto  px-4 py-12">
                 <div className="flex items-end justify-between gap-4">
                     <h2 className="text-xl md:text-3xl font-bold">Popular Courses</h2>
-                    <Button className="rounded-xl px-3 py-2 text-white border-white/15">
+                    <Button variant="outline">
                         View All Courses
                     </Button>
                 </div>
@@ -84,7 +84,7 @@ export default function Home({ onViewCourse }: { onViewCourse: (id: number) => v
                             <div className="mt-4 flex items-center justify-between">
                                 <Button
                                     onClick={() => onViewCourse(c.id)}
-                                    className="rounded-xl px-3 py-2 bg-white text-black border-2 border-transparent bg-clip-padding relative before:absolute before:inset-0 before:bg-gradient-to-r before:from-indigo-500 before:to-fuchsia-500 before:rounded-xl before:-z-10 before:m-[-2px]"
+                                    variant="primary"
                                 >
                                     View Details →
                                 </Button>
