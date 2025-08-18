@@ -1,5 +1,4 @@
-// API Configuration and Utilities
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3007';
+import { http } from "./http";
 
 export interface ApiResponse<T = any> {
   success: boolean;
@@ -31,84 +30,17 @@ export interface LoginRequest {
   password: string;
 }
 
-class ApiClient {
-  private baseURL: string;
-
-  constructor(baseURL: string) {
-    this.baseURL = baseURL;
+export const api = {
+  register(payload: RegisterRequest) {
+    return http.post<ApiResponse>("/api/auth/register", payload);
+  },
+  login(payload: LoginRequest) {
+    return http.post<ApiResponse<LoginResponse>>("/api/auth/login", payload);
+  },
+  me() {
+    return http.get<ApiResponse>("/api/auth/me");
   }
+};
 
-  private async request<T>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<ApiResponse<T>> {
-    const url = `${this.baseURL}${endpoint}`;
-    
-    const config: RequestInit = {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
-      ...options,
-    };
-
-    try {
-      const response = await fetch(url, config);
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('API Error:', errorData);
-        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Network Error:', error);
-      throw new Error(error instanceof Error ? error.message : 'Network error occurred');
-    }
-  }
-
-  async get<T>(endpoint: string, headers?: Record<string, string>): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, { method: 'GET', headers });
-  }
-
-  async post<T>(
-    endpoint: string,
-    data?: any,
-    headers?: Record<string, string>
-  ): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, {
-      method: 'POST',
-      body: data ? JSON.stringify(data) : undefined,
-      headers,
-    });
-  }
-
-  async put<T>(
-    endpoint: string,
-    data?: any,
-    headers?: Record<string, string>
-  ): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, {
-      method: 'PUT',
-      body: data ? JSON.stringify(data) : undefined,
-      headers,
-    });
-  }
-
-  async delete<T>(endpoint: string, headers?: Record<string, string>): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, { method: 'DELETE', headers });
-  }
-
-  // Auth specific methods
-  async register(data: RegisterRequest): Promise<ApiResponse> {
-    return this.post('/api/auth/register', data);
-  }
-
-  async login(data: LoginRequest): Promise<ApiResponse<LoginResponse>> {
-    return this.post<LoginResponse>('/api/auth/login', data);
-  }
-}
-
-export const apiClient = new ApiClient(BASE_URL);
+// Keep backward compatibility
+export { api as apiClient };

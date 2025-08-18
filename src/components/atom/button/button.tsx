@@ -17,7 +17,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
 
   const variants: Record<NonNullable<ButtonProps["variant"]>, string> = {
     primary:
-      "bg-white text-black hover:bg-gray-100 focus:ring-indigo-500",
+      "bg-black text-black hover:bg-gray-100 focus:ring-indigo-500",
     secondary:
       "bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white hover:from-indigo-600 hover:to-fuchsia-600 focus:ring-indigo-500",
     outline:
