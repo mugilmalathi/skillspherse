@@ -5,19 +5,21 @@ import Home from "./pages/Home";
 import Courses from "./pages/Courses";
 import CourseDetail from "./pages/CourseDetail";
 import Checkout from "./pages/Checkout";
+import PaymentGateway from "./pages/PaymentGateway";
 import MyCourses from "./pages/MyCourses";
 import Login from "./pages/Login";
 import Registration from "@/pages/Registration";
 import { AuthManager } from "./utils/auth";
+import type { Course } from "./types/course";
 
-type Page = "home" | "courses" | "course-detail" | "checkout" | "my-courses" | "login" | "progress"   | "registration";
+type Page = "home" | "courses" | "course-detail" | "checkout" | "payment" | "my-courses" | "login" | "progress" | "registration";
 
 export default function App(){
   const [page, setPage] = React.useState<Page>("home");
   const [isAuthed, setAuthed] = React.useState(AuthManager.isAuthenticated());
   const [userName, setUserName] = React.useState(AuthManager.getUser()?.name || "");
-  const [owned, setOwned] = React.useState<number[]>([]);
-  const [activeCourse, setActiveCourse] = React.useState<number | null>(1);
+  const [activeCourse, setActiveCourse] = React.useState<Course | null>(null);
+  const [activeCourseId, setActiveCourseId] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     const user = AuthManager.getUser();
@@ -43,6 +45,28 @@ export default function App(){
     setPage("home");
   };
 
+  const handleViewCourse = (courseId: string) => {
+    setActiveCourseId(courseId);
+    setPage("course-detail");
+  };
+
+  const handleCheckout = (course: Course) => {
+    setActiveCourse(course);
+    setPage("checkout");
+  };
+
+  const handlePayment = () => {
+    if (activeCourse) {
+      setPage("payment");
+    }
+  };
+
+  const handlePaymentSuccess = () => {
+    setActiveCourse(null);
+    setActiveCourseId(null);
+    setPage("home");
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <Navbar 
@@ -52,11 +76,32 @@ export default function App(){
         onLogout={handleLogout}
         userName={userName}
       />
-      {page === "home" && <Home onViewCourse={(id)=>{ setActiveCourse(id); setPage("course-detail"); }} />}
-      {page === "courses" && <Courses onView={(id)=>{ setActiveCourse(id); setPage("course-detail"); }} />}
-      {page === "course-detail" && activeCourse!=null && <CourseDetail id={activeCourse} onCheckout={(id)=>{ setActiveCourse(id); setPage("checkout"); }} />}
-      {page === "checkout" && activeCourse!=null && <Checkout id={activeCourse} onSuccess={()=>{ setOwned(v=>Array.from(new Set(v.concat(activeCourse)))); setPage("my-courses"); }} />}
-      {page === "my-courses" && <MyCourses owned={owned} />}
+      {page === "home" && (
+        <Home 
+          onViewCourse={handleViewCourse}
+          onViewAllCourses={() => setPage("courses")}
+        />
+      )}
+      {page === "courses" && <Courses onView={handleViewCourse} />}
+      {page === "course-detail" && activeCourseId && (
+        <CourseDetail 
+          courseId={activeCourseId} 
+          onCheckout={handleCheckout} 
+        />
+      )}
+      {page === "checkout" && activeCourse && (
+        <Checkout 
+          course={activeCourse} 
+          onSuccess={handlePayment} 
+        />
+      )}
+      {page === "payment" && activeCourse && (
+        <PaymentGateway 
+          amount={activeCourse.price} 
+          onSuccess={handlePaymentSuccess} 
+        />
+      )}
+      {page === "my-courses" && <MyCourses />}
       {page === "login" && <Login onLogin={handleLogin} />}
       {page === "registration" && <Registration onNavigateToLogin={() => setPage("login")} />}
       {page === "progress" && <div className="p-10 text-slate-300">Progress dashboard (POC placeholder).</div>}
