@@ -8,25 +8,57 @@ import Checkout from "./pages/Checkout";
 import MyCourses from "./pages/MyCourses";
 import Login from "./pages/Login";
 import Registration from "@/pages/Registration";
+import { AuthManager } from "./utils/auth";
 
 type Page = "home" | "courses" | "course-detail" | "checkout" | "my-courses" | "login" | "progress"   | "registration";
 
 export default function App(){
   const [page, setPage] = React.useState<Page>("home");
-  const [isAuthed, setAuthed] = React.useState(false);
+  const [isAuthed, setAuthed] = React.useState(AuthManager.isAuthenticated());
+  const [userName, setUserName] = React.useState(AuthManager.getUser()?.name || "");
   const [owned, setOwned] = React.useState<number[]>([]);
   const [activeCourse, setActiveCourse] = React.useState<number | null>(1);
 
+  React.useEffect(() => {
+    const user = AuthManager.getUser();
+    if (user) {
+      setAuthed(true);
+      setUserName(user.name);
+    }
+  }, []);
+
+  const handleLogin = () => {
+    const user = AuthManager.getUser();
+    if (user) {
+      setAuthed(true);
+      setUserName(user.name);
+      setPage("home");
+    }
+  };
+
+  const handleLogout = () => {
+    AuthManager.clearAuth();
+    setAuthed(false);
+    setUserName("");
+    setPage("home");
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
-      <Navbar page={page} setPage={setPage} isAuthed={isAuthed} onLogout={()=>setAuthed(false)} />
+      <Navbar 
+        page={page} 
+        setPage={setPage} 
+        isAuthed={isAuthed} 
+        onLogout={handleLogout}
+        userName={userName}
+      />
       {page === "home" && <Home onViewCourse={(id)=>{ setActiveCourse(id); setPage("course-detail"); }} />}
       {page === "courses" && <Courses onView={(id)=>{ setActiveCourse(id); setPage("course-detail"); }} />}
       {page === "course-detail" && activeCourse!=null && <CourseDetail id={activeCourse} onCheckout={(id)=>{ setActiveCourse(id); setPage("checkout"); }} />}
       {page === "checkout" && activeCourse!=null && <Checkout id={activeCourse} onSuccess={()=>{ setOwned(v=>Array.from(new Set(v.concat(activeCourse)))); setPage("my-courses"); }} />}
       {page === "my-courses" && <MyCourses owned={owned} />}
-      {page === "login" && <Login onLogin={()=>{ setAuthed(true); setPage("home"); }} />}
-      {page === "registration" && <Registration />}
+      {page === "login" && <Login onLogin={handleLogin} />}
+      {page === "registration" && <Registration onNavigateToLogin={() => setPage("login")} />}
       {page === "progress" && <div className="p-10 text-slate-300">Progress dashboard (POC placeholder).</div>}
       <footer className="mt-20 border-t border-white/10 bg-slate-900">
         <div className="mx-auto px-4 py-10 grid gap-6 md:grid-cols-3 text-slate-400">

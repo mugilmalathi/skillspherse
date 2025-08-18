@@ -39,7 +39,8 @@ export default function CourseDetail({
               </div>
               <Button
                   onClick={() => onCheckout(c.id)}
-                  className="mt-3 rounded-xl px-3 py-2 bg-white text-black border-2 border-transparent bg-clip-padding relative before:absolute before:inset-0 before:bg-gradient-to-r before:from-indigo-500 before:to-fuchsia-500 before:rounded-xl before:-z-10 before:m-[-2px]"
+                  variant="primary"
+                  className="mt-3"
               >
                 Buy Now
               </Button>

@@ -1,24 +1,102 @@
+import React from "react";
 import Button from "../../components/atom/button/button";
+import { api } from "../../utils/api";
+import { AuthManager } from "../../utils/auth";
 
+export default function Login({ onLogin }: { onLogin: () => void }) {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const [success, setSuccess] = React.useState<string | null>(null);
 
-export default function Login({ onLogin }:{ onLogin: ()=>void }){
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setSuccess(null);
+
+    if (!email.trim() || !password) {
+      setError("Please fill in all fields.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const res = await api.login({ email: email.trim(), password });
+
+      // Normalize axios response: either ApiResponse or AxiosResponse<ApiResponse>
+      const envelope: any = (res as any)?.data ?? res;
+      const payload: any = envelope?.data ?? envelope; // <- this will be { user, token }
+
+      if (payload?.user && payload?.token) {
+        AuthManager.saveAuth(payload); // expects { user, token }
+        setSuccess("Login successful! Redirecting…");
+        // give user a moment to see the message, then navigate
+        setTimeout(() => onLogin(), 700);
+      } else {
+        setError(envelope?.message || "Login failed");
+      }
+    } catch (err: any) {
+      setError(err?.message || "Login failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="min-h-[70vh] grid place-items-center px-4">
-      <div className="w-full max-w-md rounded-2xl border border-white/10 bg-slate-900/70 p-6">
-        <h1 className="text-2xl font-semibold">Sign in to your account</h1>
-        <div className="mt-4 grid gap-4">
-          <div>
-            <label className="text-sm text-slate-300">Email address</label>
-            <input className="mt-1 w-full rounded-xl bg-slate-950 border border-white/10 px-3 py-2" placeholder="you@example.com" />
-          </div>
-          <div>
-            <label className="text-sm text-slate-300">Password</label>
-            <input type="password" className="mt-1 w-full rounded-xl bg-slate-950 border border-white/10 px-3 py-2" placeholder="••••••••" />
-          </div>
-          <Button onClick={onLogin} className="rounded-xl px-4 py-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500">Sign in</Button>
-          <Button onClick={onLogin} className="rounded-xl px-4 py-2 bg-white text-black border-2 border-transparent bg-clip-padding relative before:absolute before:inset-0 before:bg-gradient-to-r before:from-indigo-500 before:to-fuchsia-500 before:rounded-xl before:-z-10 before:m-[-2px]">Sign in</Button>
+      <div className="min-h-[70vh] grid place-items-center px-4">
+        <div className="w-full max-w-md rounded-2xl border border-white/10 bg-slate-900/70 p-6">
+          <h1 className="text-2xl font-semibold">Sign in to your account</h1>
+
+          <form onSubmit={handleSubmit} className="mt-4 grid gap-4">
+            <div>
+              <label htmlFor="email" className="text-sm text-slate-300">
+                Email address
+              </label>
+              <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="mt-1 w-full rounded-xl bg-slate-950 border border-white/10 px-3 py-2 text-white placeholder:text-slate-500"
+                  placeholder="you@example.com"
+                  required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className="text-sm text-slate-300">
+                Password
+              </label>
+              <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="mt-1 w-full rounded-xl bg-slate-950 border border-white/10 px-3 py-2 text-white placeholder:text-slate-500"
+                  placeholder="••••••••"
+                  required
+              />
+            </div>
+
+            {error && (
+                <div className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg p-3">
+                  {error}
+                </div>
+            )}
+
+            {success && (
+                <div className="text-sm text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 rounded-lg p-3">
+                  {success}
+                </div>
+            )}
+
+            <Button type="submit" variant="secondary" disabled={loading} className="w-full">
+              {loading ? "Signing in..." : "Sign in"}
+            </Button>
+          </form>
         </div>
       </div>
-    </div>
   );
 }

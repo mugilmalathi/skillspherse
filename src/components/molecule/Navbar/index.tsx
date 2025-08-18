@@ -1,11 +1,13 @@
 import React from "react";
 import { LogOut, Menu } from "lucide-react";
+import Button from "../../atom/button/button";
 
 type Props = {
     page: string;
     setPage: (p: string) => void;
     isAuthed: boolean;
     onLogout: () => void;
+    userName?: string;
 };
 
 const navItem = (
@@ -24,7 +26,7 @@ const navItem = (
     </div>
 );
 
-export default function Navbar({ page, setPage, isAuthed, onLogout }: Props) {
+export default function Navbar({ page, setPage, isAuthed, onLogout, userName }: Props) {
     const [open, setOpen] = React.useState(false);
 
     return (
@@ -43,35 +45,38 @@ export default function Navbar({ page, setPage, isAuthed, onLogout }: Props) {
                     {navItem("Home", "home", page === "home", setPage)}
                     {navItem("Courses", "courses", page === "courses", setPage)}
                     {isAuthed && navItem("My Courses", "my-courses", page === "my-courses", setPage)}
-                    {navItem("Progress", "progress", page === "progress", setPage)}
+                    {isAuthed && navItem("Progress", "progress", page === "progress", setPage)}
 
                     <div className="mx-3 h-6 w-px bg-white/10" />
 
                     {!isAuthed ? (
                         <div className="flex items-center gap-2">
-                            <button
-                                className="rounded-xl px-3 py-2 border border-white bg-white text-white hover:bg-gray-100"
+                            <Button
+                                variant="primary"
                                 onClick={() => setPage("login")}
                             >
                                 Login
-                            </button>
-                            <button
-                                className="rounded-xl px-3 py-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500"
+                            </Button>
+                            <Button
+                                className="rounded-xl px-3 py-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white hover:from-indigo-600 hover:to-fuchsia-600 transition-colors"
                                 onClick={() => setPage("registration")}
                             >
                                 Sign Up
-                            </button>
+                            </Button>
                         </div>
                     ) : (
-                        <button
-                            className="rounded-xl px-3 py-2 bg-white/10 hover:bg-white/15"
-                            onClick={onLogout}
-                        >
-              <span className="inline-flex items-center gap-2">
-                <LogOut className="h-4 w-4" />
-                Logout
-              </span>
-                        </button>
+                        <div className="flex items-center gap-3">
+                            <span className="text-white">Welcome, {userName}</span>
+                            <Button
+                                variant="primary"
+                                onClick={onLogout}
+                            >
+                                <span className="inline-flex items-center gap-2">
+                                    <LogOut className="h-4 w-4" />
+                                    Logout
+                                </span>
+                            </Button>
+                        </div>
                     )}
                 </div>
 
@@ -99,42 +104,49 @@ export default function Navbar({ page, setPage, isAuthed, onLogout }: Props) {
                                         setPage(p);
                                         setOpen(false);
                                     })}
-                                {navItem("Progress", "progress", page === "progress", (p) => {
+                                {isAuthed &&
+                                    navItem("Progress", "progress", page === "progress", (p) => {
                                     setPage(p);
                                     setOpen(false);
                                 })}
 
                                 {!isAuthed ? (
                                     <>
-                                        <button
-                                            className="rounded-xl px-3 py-2 border border-white bg-white text-white hover:bg-gray-100"
+                                        <Button
+                                            className="rounded-xl px-3 py-2 border border-white bg-transparent text-white hover:bg-white hover:text-white transition-colors w-full text-left"
                                             onClick={() => {
                                                 setPage("login");
                                                 setOpen(false);
                                             }}
                                         >
                                             Login
-                                        </button>
-                                        <button
-                                            className="rounded-xl px-3 py-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500"
+                                        </Button>
+                                        <Button
+                                            className="rounded-xl px-3 py-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white hover:from-indigo-600 hover:to-fuchsia-600 transition-colors w-full text-left"
                                             onClick={() => {
                                                 setPage("registration");
                                                 setOpen(false);
                                             }}
                                         >
                                             Sign Up
-                                        </button>
+                                        </Button>
                                     </>
                                 ) : (
-                                    <button
-                                        className="rounded-xl px-3 py-2 bg-white/10 hover:bg-white/15"
-                                        onClick={onLogout}
-                                    >
-                    <span className="inline-flex items-center gap-2">
-                      <LogOut className="h-4 w-4" />
-                      Logout
-                    </span>
-                                    </button>
+                                    <div className="space-y-2">
+                                        <div className="text-white px-3 py-2">Welcome, {userName}</div>
+                                        <Button
+                                            variant="primary"
+                                            onClick={() => {
+                                                onLogout();
+                                                setOpen(false);
+                                            }}
+                                        >
+                                            <span className="inline-flex items-center gap-2">
+                                                <LogOut className="h-4 w-4" />
+                                                Logout
+                                            </span>
+                                        </Button>
+                                    </div>
                                 )}
                             </div>
                         </div>
