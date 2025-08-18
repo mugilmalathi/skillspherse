@@ -14,7 +14,7 @@ export default function Courses({ onView }: { onView: (id: number) => void }) {
                         </div>
                         <h3 className="mt-2 font-semibold">{c.title}</h3>
                         <div className="mt-4 flex items-center justify-between">
-                            <Button onClick={() => onView(c.id)} className="rounded-xl px-3 py-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white hover:from-indigo-600 hover:to-fuchsia-600 transition-colors">View Details →</Button>
+                            <Button onClick={() => onView(c.id)} variant="primary">View Details →</Button>
                             <div className="text-slate-200 font-semibold">${c.price.toFixed(2)}</div>
                         </div>
                     </div>

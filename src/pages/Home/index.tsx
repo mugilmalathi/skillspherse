@@ -16,12 +16,12 @@ export default function Home({ onViewCourse }: { onViewCourse: (id: number) => v
                     Get AI-powered feedback to improve your effectiveness.
                 </p>
 
-                <div className="mt-8 flex flex-wrap gap-3 text-white">
+                <div className="mt-8 flex flex-wrap gap-3">
                     <Button variant="primary">
                         Explore Courses
                     </Button>
 
-                    <Button className="rounded-xl px-3 py-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white hover:from-indigo-600 hover:to-fuchsia-600 transition-colors">
+                    <Button variant="outline">
                         <span className="inline-flex items-center gap-2">
                             <PlayCircle className="h-4 w-4" /> Start Free Trial
                         </span>
@@ -64,7 +64,7 @@ export default function Home({ onViewCourse }: { onViewCourse: (id: number) => v
             <div className="mx-auto px-4 py-12">
                 <div className="flex items-end justify-between gap-4">
                     <h2 className="text-xl md:text-3xl font-bold">Popular Courses</h2>
-                    <Button variant="primary">
+                    <Button variant="outline">
                         View All Courses
                     </Button>
                 </div>
