@@ -18,7 +18,7 @@ export default function Home({
         const fetchFeaturedCourses = async () => {
             try {
                 const response = await api.getCourses({ limit: 3, sortBy: "createdAt", sortOrder: "desc" });
-                setFeaturedCourses(response.data.courses);
+                setFeaturedCourses(response.data ?? []);
             } catch (error) {
                 console.error("Failed to fetch featured courses:", error);
             } finally {
@@ -147,7 +147,7 @@ export default function Home({
                                     >
                                         View Details →
                                     </Button>
-                                    <div className="text-slate-200 font-semibold">${course.price.toFixed(2)}</div>
+                                    <div className="text-slate-200 font-semibold">₹{course.price.toFixed(2)}</div>
                                 </div>
                             </div>
                         ))}
