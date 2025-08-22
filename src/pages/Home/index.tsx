@@ -21,6 +21,8 @@ export default function Home({
                 setFeaturedCourses(response.data ?? []);
             } catch (error) {
                 console.error("Failed to fetch featured courses:", error);
+                // Set empty array as fallback when API is unavailable
+                setFeaturedCourses([]);
             } finally {
                 setLoading(false);
             }
@@ -120,7 +122,7 @@ export default function Home({
                     </div>
                 ) : (
                     <div className="mt-6 grid min-w-0 gap-6 md:grid-cols-3">
-                        {featuredCourses.map((course) => (
+                        {featuredCourses.length > 0 ? featuredCourses.map((course) => (
                             <div key={course._id} className="bg-slate-900/70 border border-white/10 rounded-2xl p-6 hover:bg-slate-900/90 transition-colors">
                                 <div className="mb-4">
                                     <img
@@ -150,7 +152,15 @@ export default function Home({
                                     <div className="text-slate-200 font-semibold">₹{course.price.toFixed(2)}</div>
                                 </div>
                             </div>
-                        ))}
+                        )) : (
+                            <div className="col-span-full text-center py-12">
+                                <div className="text-slate-400 mb-4">
+                                    <GraduationCap className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                                    <p>Unable to load courses at the moment.</p>
+                                    <p className="text-sm mt-1">Please check that the API server is running.</p>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
