@@ -2,6 +2,7 @@ import React from "react";
 import Button from "../../components/atom/button/button";
 import { api } from "../../utils/api";
 import type { Course } from "../../types/course";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Search } from "lucide-react";
 
 export default function Courses({ onView }: { onView: (courseId: string) => void }) {
@@ -20,6 +21,7 @@ export default function Courses({ onView }: { onView: (courseId: string) => void
     const fetchCourses = React.useCallback(async () => {
         try {
             setLoading(true);
+            setError(null);
             const params = {
                 page: currentPage,
                 limit: 12,
@@ -31,9 +33,12 @@ export default function Courses({ onView }: { onView: (courseId: string) => void
             };
 
             const response = await api.getCourses(params);
-            console.log("API Response:", response); // Debug log to check the response
-            setCourses(response.data ?? []);
-            setTotalPages(response.data?.pagination?.total || 1); // Adjust for actual pagination structure
+            if (response.success && response.data) {
+                setCourses(response.data.courses || []);
+                setTotalPages(response.data.pagination?.totalPages || 1);
+            } else {
+                setError(response.message || "Failed to fetch courses");
+            }
         } catch (err: any) {
             setError(err.message || "Failed to fetch courses");
         } finally {
@@ -123,9 +128,11 @@ export default function Courses({ onView }: { onView: (courseId: string) => void
             </div>
 
             {error && (
-                <div className="bg-red-900/20 border border-red-500/20 rounded-xl p-4 mb-6">
-                    <p className="text-red-400">{error}</p>
-                </div>
+                <Alert className="mb-6">
+                    <AlertDescription className="text-red-400">
+                        {error}
+                    </AlertDescription>
+                </Alert>
             )}
 
             {courses.length === 0 && !loading ? (
@@ -143,8 +150,7 @@ export default function Courses({ onView }: { onView: (courseId: string) => void
                                 <div className="mb-4">
                                     <img
                                         src={
-                                            course.thumbnail ||
-                                            "https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=400"
+                                            "/src/assets/images/course.png"
                                         }
                                         alt={course.title}
                                         className="w-full h-40 object-cover rounded-lg"

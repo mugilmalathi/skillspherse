@@ -1,17 +1,36 @@
 import React from "react";
 import Button from "../../components/atom/button/button";
 import { api } from "../../utils/api";
-import type { Course } from "../../types/course";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CheckCircle2, Clock, User, BookOpen, Star } from "lucide-react";
+
+interface CourseDetailData {
+  id: string;
+  title: string;
+  description: string;
+  instructor: string;
+  price: number;
+  category: string;
+  duration: number;
+  level: string;
+  thumbnail: string;
+  rating: number;
+  totalRatings: number;
+  enrollmentCount: number;
+  tags: string[];
+  requirements: string[];
+  learningOutcomes: string[];
+  createdAt: string;
+}
 
 export default function CourseDetail({
                                        courseId,
                                        onCheckout,
                                      }: {
   courseId: string;
-  onCheckout: (course: Course) => void;
+  onCheckout: (course: any) => void;
 }) {
-  const [course, setCourse] = React.useState<Course | null>(null);
+  const [course, setCourse] = React.useState<CourseDetailData | null>(null);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -19,14 +38,12 @@ export default function CourseDetail({
     const fetchCourse = async () => {
       try {
         setLoading(true);
-        // For now, we'll get the course from the courses list
-        // In a real app, you'd have a separate endpoint for single course
-        const response = await api.getCourses();
-        const foundCourse = response.data.courses.find(c => c._id === courseId);
-        if (foundCourse) {
-          setCourse(foundCourse);
+        setError(null);
+        const response = await api.getCourseDetail(courseId);
+        if (response.success && response.data) {
+          setCourse(response.data);
         } else {
-          setError("Course not found");
+          setError(response.message || "Course not found");
         }
       } catch (err: any) {
         setError(err.message || "Failed to fetch course");
@@ -60,8 +77,12 @@ export default function CourseDetail({
   if (error || !course) {
     return (
       <div className="mx-auto max-w-5xl px-4 py-12">
+        <Alert className="mb-6">
+          <AlertDescription className="text-red-400">
+            {error || "Course not found"}
+          </AlertDescription>
+        </Alert>
         <div className="text-center">
-          <p className="text-red-400">{error || "Course not found"}</p>
           <Button
             onClick={() => history.back()}
             variant="outline"
@@ -90,7 +111,7 @@ export default function CourseDetail({
             <div className="bg-slate-900/70 border border-white/10 rounded-2xl p-6">
               <div className="mb-4">
                 <img
-                  src={course.thumbnail || "https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=800"}
+                  src="/src/assets/images/course.png"}
                   alt={course.title}
                   className="w-full h-64 object-cover rounded-lg"
                 />
@@ -102,6 +123,10 @@ export default function CourseDetail({
                 </span>
                 <span className="text-slate-400">• {formatDuration(course.duration)}</span>
                 <span className="text-slate-400">• {course.category}</span>
+                <div className="flex items-center gap-1">
+                  <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                  <span className="text-slate-400">{course.rating} ({course.totalRatings} reviews)</span>
+                </div>
               </div>
               
               <h1 className="text-3xl font-semibold mb-3">{course.title}</h1>
@@ -117,8 +142,8 @@ export default function CourseDetail({
                   <span>{formatDuration(course.duration)}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <BookOpen className="h-4 w-4" />
-                  <span>{course.curriculum.length} lessons</span>
+                  <User className="h-4 w-4" />
+                  <span>{course.enrollmentCount} students</span>
                 </div>
               </div>
             </div>
@@ -151,26 +176,19 @@ export default function CourseDetail({
               </div>
             )}
 
-            {/* Curriculum */}
-            <div className="bg-slate-900/70 border border-white/10 rounded-2xl p-6">
-              <h3 className="font-semibold text-xl mb-4">Course Curriculum:</h3>
-              <div className="space-y-3">
-                {course.curriculum
-                  .sort((a, b) => a.order - b.order)
-                  .map((item, i) => (
-                    <div key={i} className="flex items-center justify-between p-3 bg-slate-950/50 rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <span className="text-slate-500 text-sm">#{item.order}</span>
-                        <span className="text-slate-300">{item.title}</span>
-                        <span className="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded">
-                          {item.type}
-                        </span>
-                      </div>
-                      <span className="text-slate-400 text-sm">{item.duration}min</span>
-                    </div>
+            {/* Tags */}
+            {course.tags.length > 0 && (
+              <div className="bg-slate-900/70 border border-white/10 rounded-2xl p-6">
+                <h3 className="font-semibold text-xl mb-4">Course Tags:</h3>
+                <div className="flex flex-wrap gap-2">
+                  {course.tags.map((tag, i) => (
+                    <span key={i} className="text-sm bg-slate-800 text-slate-300 px-3 py-1 rounded-full">
+                      {tag}
+                    </span>
                   ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Sidebar */}
@@ -181,10 +199,32 @@ export default function CourseDetail({
                   ${course.price.toFixed(2)}
                 </div>
                 <p className="text-slate-400 text-sm">One-time payment</p>
+                <div className="flex items-center justify-center gap-1 mt-2">
+                  <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                  <span className="text-slate-300">{course.rating}</span>
+                  <span className="text-slate-400">({course.totalRatings} reviews)</span>
+                </div>
               </div>
               
               <Button
-                onClick={() => onCheckout(course)}
+                onClick={() => onCheckout({
+                  _id: course.id,
+                  title: course.title,
+                  description: course.description,
+                  instructor: course.instructor,
+                  price: course.price,
+                  category: course.category,
+                  duration: course.duration,
+                  level: course.level,
+                  thumbnail: course.thumbnail,
+                  tags: course.tags,
+                  requirements: course.requirements,
+                  learningOutcomes: course.learningOutcomes,
+                  curriculum: [],
+                  isPublished: true,
+                  createdAt: course.createdAt,
+                  updatedAt: course.createdAt
+                })}
                 variant="secondary"
                 className="w-full mb-4 text-lg py-3"
               >
@@ -201,27 +241,14 @@ export default function CourseDetail({
                   <span className="text-white">{formatDuration(course.duration)}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Lessons:</span>
-                  <span className="text-white">{course.curriculum.length}</span>
+                  <span className="text-slate-400">Students:</span>
+                  <span className="text-white">{course.enrollmentCount}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-400">Category:</span>
                   <span className="text-white capitalize">{course.category.replace('-', ' ')}</span>
                 </div>
               </div>
-              
-              {course.tags.length > 0 && (
-                <div className="mt-6">
-                  <p className="text-slate-400 text-sm mb-2">Tags:</p>
-                  <div className="flex flex-wrap gap-2">
-                    {course.tags.map((tag, i) => (
-                      <span key={i} className="text-xs bg-slate-800 text-slate-300 px-2 py-1 rounded">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>

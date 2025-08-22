@@ -126,7 +126,7 @@ export default function Home({
                             <div key={course._id} className="bg-slate-900/70 border border-white/10 rounded-2xl p-6 hover:bg-slate-900/90 transition-colors">
                                 <div className="mb-4">
                                     <img
-                                        src={course.thumbnail || "https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=400"}
+                                        src="/src/assets/images/course.png"
                                         alt={course.title}
                                         className="w-full h-40 object-cover rounded-lg"
                                     />

@@ -43,6 +43,46 @@ export interface CoursesParams {
   sortOrder?: 'asc' | 'desc';
 }
 
+export interface CourseDetailResponse {
+  success: boolean;
+  message: string;
+  data: {
+    id: string;
+    title: string;
+    description: string;
+    instructor: string;
+    price: number;
+    category: string;
+    duration: number;
+    level: string;
+    thumbnail: string;
+    rating: number;
+    totalRatings: number;
+    enrollmentCount: number;
+    tags: string[];
+    requirements: string[];
+    learningOutcomes: string[];
+    createdAt: string;
+  };
+  timestamp: string;
+}
+
+export interface UserProfileResponse {
+  success: boolean;
+  message: string;
+  data: {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+    isActive: boolean;
+    createdAt: string;
+    updatedAt: string;
+    lastLoginAt: string;
+  };
+  timestamp: string;
+}
+
 export const api = {
   register(payload: RegisterRequest) {
     return http.post<ApiResponse>("/api/auth/register", payload);
@@ -51,7 +91,10 @@ export const api = {
     return http.post<ApiResponse<LoginResponse>>("/api/auth/login", payload);
   },
   me() {
-    return http.get<ApiResponse>("/api/auth/me");
+    return http.get<UserProfileResponse>("/api/auth/me");
+  },
+  logout() {
+    return http.post<ApiResponse>("/api/auth/logout");
   },
   getCourses(params?: CoursesParams) {
     const searchParams = new URLSearchParams();
@@ -65,8 +108,11 @@ export const api = {
     const queryString = searchParams.toString();
     return http.get<CoursesResponse>(`/api/courses${queryString ? `?${queryString}` : ''}`);
   },
+  getCourseDetail(courseId: string) {
+    return http.get<CourseDetailResponse>(`/api/public/courses/${courseId}`);
+  },
   getPurchasedCourses(page = 1, limit = 10) {
-    return http.get<PurchasedCoursesResponse>(`/api/courses/purchased/all?page=${page}&limit=${limit}`);
+    return http.get<PurchasedCoursesResponse>(`/api/courses/purchased/all${page || limit ? `?page=${page}&limit=${limit}` : ''}`);
   }
 };
 

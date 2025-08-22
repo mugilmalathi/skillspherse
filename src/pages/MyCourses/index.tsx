@@ -1,28 +1,49 @@
 import React from "react";
 import Button from "../../components/atom/button/button";
 import { api } from "../../utils/api";
-import type { Course } from "../../types/course";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { BookOpen, Clock, User, Play } from "lucide-react";
 
+interface PurchasedCourse {
+  _id: string;
+  title: string;
+  description: string;
+  instructor: string;
+  price: number;
+  category: string;
+  duration: number;
+  level: string;
+  thumbnail: string;
+  tags: string[];
+  requirements: string[];
+  learningOutcomes: string[];
+  curriculum: any[];
+  isPublished: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export default function MyCourses() {
-  const [courses, setCourses] = React.useState<Course[]>([]);
+  const [courses, setCourses] = React.useState<PurchasedCourse[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const [totalPages, setTotalPages] = React.useState(1);
 
   const fetchPurchasedCourses = React.useCallback(async () => {
     try {
       setLoading(true);
-      const response = await api.getPurchasedCourses(currentPage, 10);
-      setCourses(response.data.courses);
-      setTotalPages(response.data.pagination.totalPages);
+      setError(null);
+      const response = await api.getPurchasedCourses();
+      if (response.success && response.data) {
+        setCourses(response.data);
+      } else {
+        setError(response.message || "Failed to fetch purchased courses");
+      }
     } catch (err: any) {
       setError(err.message || "Failed to fetch purchased courses");
     } finally {
       setLoading(false);
     }
-  }, [currentPage]);
+  }, []);
 
   React.useEffect(() => {
     fetchPurchasedCourses();
@@ -52,9 +73,11 @@ export default function MyCourses() {
       <h1 className="text-3xl font-bold">My Courses</h1>
       
       {error && (
-        <div className="mt-6 bg-red-900/20 border border-red-500/20 rounded-xl p-4">
-          <p className="text-red-400">{error}</p>
-        </div>
+        <Alert className="mt-6">
+          <AlertDescription className="text-red-400">
+            {error}
+          </AlertDescription>
+        </Alert>
       )}
 
       {courses.length === 0 && !loading ? (
@@ -62,7 +85,7 @@ export default function MyCourses() {
           <BookOpen className="h-16 w-16 text-slate-500 mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-slate-300 mb-2">No courses yet</h3>
           <p className="text-slate-400 mb-6">You haven't purchased any courses yet. Start learning today!</p>
-          <Button variant="secondary" onClick={() => window.location.href = "#courses"}>
+          <Button variant="secondary">
             Browse Courses
           </Button>
         </div>
@@ -73,7 +96,7 @@ export default function MyCourses() {
               <div key={course._id} className="rounded-2xl border border-white/10 bg-slate-900/70 p-6 hover:bg-slate-900/90 transition-colors">
                 <div className="mb-4">
                   <img
-                    src={course.thumbnail || "https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=400"}
+                    src="/src/assets/images/course.png"
                     alt={course.title}
                     className="w-full h-40 object-cover rounded-lg"
                   />
@@ -92,7 +115,7 @@ export default function MyCourses() {
                 <div className="flex items-center gap-4 text-sm text-slate-400 mb-4">
                   <div className="flex items-center gap-1">
                     <BookOpen className="h-4 w-4" />
-                    <span>{course.curriculum.length} lessons</span>
+                    <span>{course.curriculum?.length || 0} lessons</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Clock className="h-4 w-4" />
@@ -109,29 +132,6 @@ export default function MyCourses() {
               </div>
             ))}
           </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex justify-center items-center gap-4 mt-8">
-              <Button
-                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                disabled={currentPage === 1}
-                variant="outline"
-              >
-                Previous
-              </Button>
-              <span className="text-slate-300">
-                Page {currentPage} of {totalPages}
-              </span>
-              <Button
-                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                disabled={currentPage === totalPages}
-                variant="outline"
-              >
-                Next
-              </Button>
-            </div>
-          )}
         </>
       )}
     </div>

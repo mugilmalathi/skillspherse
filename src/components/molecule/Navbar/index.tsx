@@ -43,7 +43,7 @@ export default function Navbar({ page, setPage, isAuthed, onLogout, userName }: 
                 {/* Desktop menu */}
                 <div className="hidden md:flex items-center gap-1">
                     {navItem("Home", "home", page === "home", setPage)}
-                    {navItem("Courses", "courses", page === "courses", setPage)}
+                    {isAuthed && navItem("Courses", "courses", page === "courses", setPage)}
                     {isAuthed && navItem("My Courses", "my-courses", page === "my-courses", setPage)}
                     {isAuthed && navItem("Progress", "progress", page === "progress", setPage)}
 
@@ -95,10 +95,11 @@ export default function Navbar({ page, setPage, isAuthed, onLogout, userName }: 
                                     setPage(p);
                                     setOpen(false);
                                 })}
-                                {navItem("Courses", "courses", page === "courses", (p) => {
-                                    setPage(p);
-                                    setOpen(false);
-                                })}
+                                {isAuthed &&
+                                    navItem("Courses", "courses", page === "courses", (p) => {
+                                        setPage(p);
+                                        setOpen(false);
+                                    })}
                                 {isAuthed &&
                                     navItem("My Courses", "my-courses", page === "my-courses", (p) => {
                                         setPage(p);

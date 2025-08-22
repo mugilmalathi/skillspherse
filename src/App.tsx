@@ -10,6 +10,7 @@ import MyCourses from "./pages/MyCourses";
 import Login from "./pages/Login";
 import Registration from "@/pages/Registration";
 import { AuthManager } from "./utils/auth";
+import { api } from "./utils/api";
 import type { Course } from "./types/course";
 
 type Page = "home" | "courses" | "course-detail" | "checkout" | "payment" | "my-courses" | "login" | "progress" | "registration";
@@ -22,12 +23,60 @@ export default function App(){
   const [activeCourseId, setActiveCourseId] = React.useState<string | null>(null);
 
   React.useEffect(() => {
-    const user = AuthManager.getUser();
-    if (user) {
-      setAuthed(true);
-      setUserName(user.name);
-    }
+    const checkAuth = async () => {
+      if (AuthManager.isAuthenticated()) {
+        try {
+          const response = await api.me();
+          if (response.success && response.data) {
+            setAuthed(true);
+            setUserName(response.data.name);
+            // Update stored user data
+            const currentAuth = AuthManager.getAuth();
+            if (currentAuth) {
+              AuthManager.saveAuth({
+                ...currentAuth,
+                user: {
+                  id: response.data.id,
+                  name: response.data.name,
+                  email: response.data.email,
+                  role: response.data.role,
+                  isActive: response.data.isActive,
+                  createdAt: response.data.createdAt,
+                  updatedAt: response.data.updatedAt,
+                  lastLoginAt: response.data.lastLoginAt
+                }
+              });
+            }
+          } else {
+            // Token is invalid, clear auth
+            AuthManager.clearAuth();
+            setAuthed(false);
+            setUserName("");
+          }
+        } catch (error) {
+          // API call failed, clear auth
+          AuthManager.clearAuth();
+          setAuthed(false);
+          setUserName("");
+        }
+      }
+    };
+
+    checkAuth();
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      await api.logout();
+    } catch (error) {
+      console.error("Logout API call failed:", error);
+    } finally {
+      AuthManager.clearAuth();
+      setAuthed(false);
+      setUserName("");
+      setPage("home");
+    }
+  };
 
   const handleLogin = () => {
     const user = AuthManager.getUser();
@@ -38,12 +87,6 @@ export default function App(){
     }
   };
 
-  const handleLogout = () => {
-    AuthManager.clearAuth();
-    setAuthed(false);
-    setUserName("");
-    setPage("home");
-  };
 
   const handleViewCourse = (courseId: string) => {
     setActiveCourseId(courseId);

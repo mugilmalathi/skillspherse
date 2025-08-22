@@ -4,7 +4,10 @@ export interface User {
   name: string;
   email: string;
   role: string;
-  lastLoginAt: string;
+  isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  lastLoginAt?: string;
 }
 
 export interface AuthData {
