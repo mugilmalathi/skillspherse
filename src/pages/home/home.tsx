@@ -1,5 +1,5 @@
 import React from "react"
-import { Button } from "@/components/atom/button/button"
+import Button from "@/components/atom/button/button"
 import { Input } from "@/components/atom/input/input"
 import { Textarea } from "@/components/atom/textarea/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/atom/card/card"

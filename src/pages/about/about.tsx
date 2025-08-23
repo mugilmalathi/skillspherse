@@ -1,6 +1,6 @@
 import React from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/atom/card/card"
-import { Button } from "@/components/atom/button/button"
+import Button from "@/components/atom/button/button"
 
 const AboutPage: React.FC = () => {
   return (

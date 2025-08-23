@@ -1,7 +1,7 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import { Navigation } from "@/components/molecule/navigation/navigation"
-import { Button } from "@/components/atom/button/button"
+import Button from "@/components/atom/button/button"
 import { Home, Info, Mail, Menu } from "lucide-react"
 
 const Header: React.FC = () => {
