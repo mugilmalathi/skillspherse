@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Button from '../../components/atom/button/button';
 import Card from '../../components/atom/card/card';
 import { api } from '../../utils/api';
-import { Course } from '../../types/course';
+import type { Course } from '../../types/course';
 import './styles.css';
 
 interface CourseDetailProps {
